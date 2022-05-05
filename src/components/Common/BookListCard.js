@@ -5,12 +5,12 @@ import {
   Typography,
   Rating,
   IconButton,
-  Button,
+
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
-import { useState, useContext, useEffect } from "react";
+import { useContext } from "react";
 import UserContext from "../../store/User-Context";
 
 
@@ -84,7 +84,6 @@ const useStyles = makeStyles((theme) => ({
 export const BookListCard = (props) => {
   const userCtx = useContext(UserContext);
   const book = props.book;
-  // console.log(props.parentNode);
   const classes = useStyles();
   
 

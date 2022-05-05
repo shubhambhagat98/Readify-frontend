@@ -8,7 +8,7 @@ import { Button } from "@mui/material";
 
 export const LoginAlertModal = (props) => {
   const [open, setOpen] = useState(props.isOpen);
-  console.log(open);
+
 
   useEffect(() => {
     handleClickOpen();

@@ -54,7 +54,7 @@ export const MainNavigation = () => {
   }
 
   const logoutHandler = () => {
-    console.log("inside logout handler");
+
     localStorage.removeItem("readifyUser");
     localStorage.removeItem("token");
     userCtx.setUserData();

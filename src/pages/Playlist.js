@@ -1,4 +1,4 @@
-import { Alert, Container, Grid, Box, Typography, Button } from "@mui/material";
+import { Alert,  Grid, Box, Typography } from "@mui/material";
 import { useState, useContext, useEffect } from "react";
 import UserContext from "../store/User-Context";
 import Tab from "@mui/material/Tab";
@@ -179,7 +179,6 @@ export const Playlist = () => {
       });
 
       if (response.status === 200) {
-        // responseHandler();
         getAllBookLists();
       } else if (response.status === 403) {
         console.log(response.json().message);
@@ -200,7 +199,6 @@ export const Playlist = () => {
       booklistId: booklist_Id,
       isDelete: flag,
     };
-    // console.log(deleteBook);
     setDeleteBook(deleteBook);
   };
 

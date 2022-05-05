@@ -124,17 +124,14 @@ export const AddToBookListModal = (props) => {
       };
 
       try {
-        const response = await fetch(
-          baseUrl+"/createbooklistwithbook",
-          {
-            method: "POST",
-            body: JSON.stringify(inputPayload),
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        const response = await fetch(baseUrl + "/createbooklistwithbook", {
+          method: "POST",
+          body: JSON.stringify(inputPayload),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
         if (response.status === 200) {
           props.responseHandler();
@@ -162,9 +159,6 @@ export const AddToBookListModal = (props) => {
 
   const addToBooklistHandler = async (event) => {
     event.preventDefault();
-    console.log(selectedBooklistId);
-    console.log(userCtx.userData.user_id);
-    console.log(props.bookId);
 
     const isError = selectErrorHandler();
     if (!isError) {
@@ -175,7 +169,7 @@ export const AddToBookListModal = (props) => {
       };
 
       try {
-        const response = await fetch(baseUrl+"/inserttobooklist", {
+        const response = await fetch(baseUrl + "/inserttobooklist", {
           method: "POST",
           body: JSON.stringify(inputPayload),
           headers: {
@@ -203,7 +197,7 @@ export const AddToBookListModal = (props) => {
   const getAllBookListsHandler = async () => {
     try {
       const response = await fetch(
-        baseUrl+`/mybooklist?id=${userCtx.userData.user_id}`,
+        baseUrl + `/mybooklist?id=${userCtx.userData.user_id}`,
         {
           headers: {
             "Content-Type": "application/json",

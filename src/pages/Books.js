@@ -89,7 +89,6 @@ export const Books = () => {
         const data = await response.json();
         setBookList(data.books);
         setFilteredList(data.books);
-        // console.log(typeof data.books);
       } else {
         console.log("no response");
       }

@@ -102,7 +102,6 @@ export const SignUpForm = (props) => {
     }
 
     if (lname === "") {
-      console.log("inside l name");
       errorFlag = true;
       setLastNameError(true);
     }
@@ -158,7 +157,7 @@ export const SignUpForm = (props) => {
   };
 
   const submitHandler = (event) => {
-    console.log("inside Form handler");
+    
     event.preventDefault();
 
     const isError = isInputError();
