@@ -6,9 +6,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 
-export const BookListAlertModal = (props) => {
+export const DeleteBooklistModal = (props) => {
   const [open, setOpen] = useState(props.isOpen);
-  
 
   useEffect(() => {
     handleClickOpen();
@@ -20,7 +19,12 @@ export const BookListAlertModal = (props) => {
 
   const handleClose = () => {
     setOpen(false);
-    props.booklistAlertHandler();
+    props.openDeleteModalHandler();
+  };
+
+  const confirmDelete = () => {
+    props.deleteBooklistHandler(props.booklistId);
+    handleClose();
   };
 
   return (
@@ -28,12 +32,15 @@ export const BookListAlertModal = (props) => {
       <DialogTitle id="alert-dialog-title">{"BookList Alert!"}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Book is already inserted in the BookList.
+          Are you sure that you want to delete this playlist?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} sx={{ color: "#832BE0" }}>
-          Close
+        <Button onClick={handleClose} sx={{ color: "inherit" }}>
+          No
+        </Button>
+        <Button onClick={confirmDelete} sx={{ color: "#832BE0" }}>
+          Yes
         </Button>
       </DialogActions>
     </Dialog>

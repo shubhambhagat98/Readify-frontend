@@ -1,4 +1,4 @@
-import { Alert, Container, Grid, Box, Typography } from "@mui/material";
+import { Alert, Container, Grid, Box, Typography, Button } from "@mui/material";
 import { useState, useContext, useEffect } from "react";
 import UserContext from "../store/User-Context";
 import Tab from "@mui/material/Tab";
@@ -8,7 +8,10 @@ import TabPanel from "@mui/lab/TabPanel";
 import { makeStyles } from "@material-ui/core/styles";
 import { BookList } from "../components/Books/BookList";
 import { baseUrl } from "../baseUrl";
+import { SuccessModal } from "../components/Common/SuccessModal";
+import { BookListTitleBar } from "../components/Common/BookListTitleBar";
 
+const Message = "Deletion Successful!";
 
 const useStyles = makeStyles((theme) => ({
   inpuText: {
@@ -48,18 +51,27 @@ export const Playlist = () => {
   const [allBooklists, setAllBooklists] = useState([]);
   const userCtx = useContext(UserContext);
   const [responseError, setResponseError] = useState(false);
-  const [value, setValue] = useState("0");
+  const [successModal, setSuccessModal] = useState(false);
+  const [deleteBook, setDeleteBook] = useState(userCtx.deleteBookMode);
+  const [checkBooklist, setCheckBooklist ] = useState(false);
+
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setDeleteModeHandler(0, false);
+    userCtx.setLastVisitedList(newValue);
   };
   useEffect(() => {
     getAllBookLists();
+    
   }, []);
+
+  useEffect(() => {
+    userCtx.setDeleteBookMode(deleteBook);
+  }, [deleteBook]);
 
   const getAllBookLists = async () => {
     try {
       const response = await fetch(
-        baseUrl+`/mybooklistwithdata?id=${userCtx.userData.user_id}`,
+        baseUrl + `/mybooklistwithdata?id=${userCtx.userData.user_id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -70,13 +82,126 @@ export const Playlist = () => {
 
       if (response.status === 200) {
         const data = await response.json();
-        console.log(data);
+
         setAllBooklists(data);
+      }else{
+        setAllBooklists([]);
       }
     } catch (error) {
       console.log(error);
       setResponseError(true);
     }
+
+    setCheckBooklist(true);
+
+  };
+
+  const deleteBookHandler = async (bookId, booklistId) => {
+    //do Something
+
+    // alert("bookid is:"+ bookId+"\nbooklist id :"+booklistId);
+
+    const inputPayload = {
+      userId: userCtx.userData.user_id,
+      booklistId: booklistId,
+      bookId: bookId,
+    };
+
+    try {
+      const response = await fetch(baseUrl + "/deletefrombooklist", {
+        method: "POST",
+        body: JSON.stringify(inputPayload),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.status === 200) {
+        responseHandler();
+        getAllBookLists();
+      } else if (response.status === 403) {
+        console.log(response.json().message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteBooklistHandler = async(booklistId) => {
+    // do something
+    const inputPayload = {
+      userId: userCtx.userData.user_id,
+      booklistId: booklistId,
+    };
+
+    try {
+      const response = await fetch(baseUrl + "/deletebooklist", {
+        method: "POST",
+        body: JSON.stringify(inputPayload),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.status === 200) {
+        responseHandler();
+        getAllBookLists();
+        userCtx.setLastVisitedList("0");
+      } else if (response.status === 403) {
+        console.log(response.json().message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    
+    
+  };
+
+  const editBookListNameHandler = async(booklistId, booklistName) => {
+   
+    const inputPayload = {
+      userId: userCtx.userData.user_id,
+      booklistId: booklistId,
+      booklistName: booklistName
+    };
+
+    try {
+      const response = await fetch(baseUrl + "/updatebooklistname", {
+        method: "PUT",
+        body: JSON.stringify(inputPayload),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.status === 200) {
+        // responseHandler();
+        getAllBookLists();
+      } else if (response.status === 403) {
+        console.log(response.json().message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+
+  };
+
+  const responseHandler = () => {
+    setSuccessModal((prev) => !prev);
+  };
+
+  const setDeleteModeHandler = (booklist_Id, flag) => {
+    const deleteBook = {
+      booklistId: booklist_Id,
+      isDelete: flag,
+    };
+    // console.log(deleteBook);
+    setDeleteBook(deleteBook);
   };
 
   return (
@@ -91,7 +216,8 @@ export const Playlist = () => {
               marginTop: "67px",
             }}
           >
-            <TabContext value={value}>
+            
+            <TabContext value={userCtx.lastVisitedList}>
               <Grid
                 item
                 md={3}
@@ -152,7 +278,6 @@ export const Playlist = () => {
                     allowScrollButtonsMobile
                   >
                     {allBooklists.map((booklist, idx) => {
-                      console.log(idx);
                       return (
                         <Tab
                           label={booklist.booklist_name}
@@ -169,37 +294,59 @@ export const Playlist = () => {
                 </Box>
 
                 <div>
-                    {allBooklists.map((booklist,idx)=>{
-                      return  <TabPanel value={`${idx}`}>
-                            {booklist.books.length === 0 ? (
-                                <h1>No books found in this booklist</h1>
-                            ): (
-                                <BookList books={booklist.books} />
-                            )}
-                        </TabPanel>
-                    })}
+                  {allBooklists.map((booklist, idx) => {
+                    return (
+                      <TabPanel value={`${idx}`} key={"booklistTabpanel" + idx}>
+                        <BookListTitleBar
+                          booklistId={booklist.booklist_id}
+                          booklistTitle={booklist.booklist_name}
+                          setDeleteModeHandler={setDeleteModeHandler}
+                          deleteBooklistHandler={deleteBooklistHandler}
+                          editBookListNameHandler={editBookListNameHandler}
+                          booklistLength={booklist.books.length}
+                        />
 
+                        {booklist.books.length === 0 ? (
+                          <h2 style={{marginLeft:"10px"}}>No books found in this booklist</h2>
+                        ) : (
+                          <BookList
+                            books={booklist.books}
+                            parentNode={"mybooklist"}
+                            deleteBookHandler={deleteBookHandler}
+                            booklistId={booklist.booklist_id}
+                          />
+                        )}
+                      </TabPanel>
+                    );
+                  })}
                 </div>
-
               </Grid>
             </TabContext>
           </Grid>
         ) : (
-          <Box
-            sx={{
-              display: "flex",
-              flex: "1",
-              height: "90vh",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Alert sx={{ fontSize: "30px" }} severity="error">
-              No BookList Found!
-            </Alert>
-          </Box>
+          allBooklists.length === 0 && checkBooklist && <Box
+          sx={{
+            display: "flex",
+            flex: "1",
+            height: "90vh",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Alert sx={{ fontSize: "30px", display:"flex", alignItems: "center", }} severity="error">
+            No BookList Found!
+          </Alert>
+        </Box>
         )}
       </div>
+
+      {successModal && (
+        <SuccessModal
+          responseHandler={responseHandler}
+          isOpen={true}
+          message={Message}
+        />
+      )}
     </>
   );
 };

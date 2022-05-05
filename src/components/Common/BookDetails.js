@@ -16,6 +16,9 @@ import { LoginAlertModal } from "./LoginAlertModal";
 import { BookListAlertModal } from "./BookListAlertModal";
 import { AddToBookListModal } from "./AddToBookListModal";
 import { SuccessModal } from "./SuccessModal";
+import { BookList } from "../Books/BookList";
+import { baseUrl } from "../../baseUrl";
+import { CardSkeleton } from "./CardSkeleton";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -69,10 +72,15 @@ export const BookDetails = (props) => {
   const [openBooklistAlertModal, setOpenBooklistAlert] = useState(false);
   const [openAddToBooklistModal, setOpenAddToBooklistModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
+  const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
     setBook(props.book);
   }, []);
+
+  useEffect(() => {
+    getRecommenations();
+  }, [book]);
 
   const addToBooklistHandler = () => {
     if (userCtx.userData) {
@@ -96,6 +104,22 @@ export const BookDetails = (props) => {
 
   const responseHandler = () => {
     setSuccessModal((prev) => !prev);
+  };
+
+  const getRecommenations = async () => {
+    try {
+      const response = await fetch(
+        baseUrl + `/bookdatarecommendations?id=${book.book_id}`
+      );
+      if (response.status === 200) {
+        const data = await response.json();
+        setRecommendations(data.book_recommendations);
+      } else {
+        console.log(response.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -211,11 +235,14 @@ export const BookDetails = (props) => {
           fontWeight="bold"
           sx={{ mt: 1, color: "#D843DB" }}
         >
-          Recommondations
+          Recommendations
         </Typography>
-        <Typography fontWeight="normal" sx={{ mt: 3, fontSize: "20px" }}>
-          {book.book_description}
-        </Typography>
+
+        {recommendations.length === 0 ? (
+          <CardSkeleton />
+        ) : (
+          <BookList parentNode={"books"} books={recommendations} />
+        )}
       </Box>
 
       {openLoginAlert && (

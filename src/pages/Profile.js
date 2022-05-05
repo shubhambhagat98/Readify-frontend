@@ -1,9 +1,9 @@
 export const Profile  = () => {
     return (
         <div >
-        <button >-</button>
+        
         <h1>Profile</h1>
-        <button >+</button>
+        <p>work in progress ;-)</p>
       </div>
     );
 }

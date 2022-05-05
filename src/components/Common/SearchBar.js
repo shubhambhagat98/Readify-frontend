@@ -29,7 +29,7 @@ export const SearchBar = (props) => {
       <TextField
         className={classes.inpuText}
         id="standard-basic"
-        placeholder="Search by title or genre"
+        placeholder="Search by title, author or genre"
         variant="standard"
         margin="normal"
         fullWidth

@@ -90,7 +90,7 @@ export const CreateBookList = (props) => {
         if (response.status === 200) {
           props.responseHandler();
           handleClose();
-        } else if (response.status === 401) {
+        } else if (response.status === 403) {
           setResponseError(true);
         }
       } catch (error) {

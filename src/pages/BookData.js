@@ -6,16 +6,15 @@ import { baseUrl } from "../baseUrl";
 
 export const BookData = () => {
   const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
+
   const [book, setBook] = useState();
 
   const getBook = async () => {
     try {
-      const response = await fetch(baseUrl+`/bookdata?id=${id}`);
+      const response = await fetch(baseUrl + `/bookdata?id=${id}`);
       if (response.status === 200) {
         const data = await response.json();
         setBook(data.book);
-        console.log(typeof data.book);
       } else {
         console.log(response.message);
       }
@@ -25,18 +24,9 @@ export const BookData = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    setBook(null);
     getBook();
-    setIsLoading(false);
-  }, []);
-
-  if (isLoading) {
-    return (
-      <section>
-        <h1>Loading......</h1>
-      </section>
-    );
-  }
+  }, [id]);
 
   return (
     <Container maxWidth="xl">{book && <BookDetails book={book} />}</Container>

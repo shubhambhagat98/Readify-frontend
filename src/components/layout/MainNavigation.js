@@ -30,7 +30,7 @@ const sections = [
 const settings = [
   { Title: "Profile", Link: "/profile" },
   { Title: "My Booklist", Link: "/mybooklist" },
-  { Title: "Recommondations", Link: "/recommendations" },
+  { Title: "Recommendations", Link: "/recommendations" },
 ];
 
 const Message =

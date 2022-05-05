@@ -1,6 +1,18 @@
-import { Card, CardMedia, Box, Typography, Rating } from "@mui/material";
+import {
+  Card,
+  CardMedia,
+  Box,
+  Typography,
+  Rating,
+  IconButton,
+  Button,
+} from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
+import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
+import { useState, useContext, useEffect } from "react";
+import UserContext from "../../store/User-Context";
+
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -18,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   cardMedia: {
+    // position:"relative",
     aspectRatio: "4/6",
     width: "100%",
   },
@@ -28,7 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   cardBox: {
+    position: "relative !important",
     justifyContent: "center",
+    // border: "solid 2px red",
   },
 
   bookTitleBox: {
@@ -38,23 +53,58 @@ const useStyles = makeStyles((theme) => ({
     wordWrap: "break-word",
     overflow: "hidden",
   },
+
+  deleteIcon: {
+    color: "#270537 !important",
+    zIndex: "2",
+    background: "#E95DAD !important",
+    position: "absolute !important",
+    display: "flex",
+    top: "-12px",
+    right: "-12px",
+    cursor: "pointer",
+    boxShadow: "0px 2px 5px rgba(0,0,0,0.5)",
+    "&.MuiIconButton-root": {
+      transition: "0.2s",
+      "&:hover": { background: "#E95DAD", transform: "scale(1.25)" },
+    },
+  },
+
+
+  deleteIconText:{
+    fontSize: "22px !important",
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "32px !important",
+    },
+  }
+
+
 }));
 
-export const BookCard = (props) => {
-
-
+export const BookListCard = (props) => {
+  const userCtx = useContext(UserContext);
+  const book = props.book;
+  // console.log(props.parentNode);
   const classes = useStyles();
+  
 
   const navigate = useNavigate();
-  const book = props.book;
-  
 
   const goToDetailsPage = () => {
     navigate(`/bookdata/${book.book_id}`);
   };
 
+  const onBookDelete = () => {
+    props.deleteBookHandler(book.book_id, props.booklistId);
+  }
+
   return (
     <Box className={classes.cardBox}>
+      {userCtx.deleteBookMode.booklistId === props.booklistId && userCtx.deleteBookMode.isDelete && (
+        <IconButton className={classes.deleteIcon} size="small" onClick={onBookDelete}>
+          <ClearOutlinedIcon  className={classes.deleteIconText}/>
+        </IconButton>
+      )}
       <Card className={classes.card} elevation={4} onClick={goToDetailsPage}>
         <CardMedia className={classes.cardMedia} image={book.book_image} />
       </Card>
