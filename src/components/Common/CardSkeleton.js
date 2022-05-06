@@ -50,13 +50,16 @@ export const CardSkeleton = () => {
         .map((temp, idx) => (
           <Grid item key={"cardskeleton" + idx} xs={12} sm={4} md={3} lg={2}>
             <Box className={classes.cardBox}>
-              <Card className={classes.card} elevation={0}>
-                <CardMedia className={classes.cardMedia}>
-                  <Skeleton variant="rectangular" width="100%">
-                    <div style={{ aspectRatio: "4/6" }} />
-                  </Skeleton>
-                </CardMedia>
-              </Card>
+              <Box sx={{ px: { xs: 5, md: 0 } }}>
+                <Card className={classes.card} elevation={0}>
+                  <CardMedia className={classes.cardMedia}>
+                    <Skeleton variant="rectangular" width="100%">
+                      <div style={{ aspectRatio: "4/6" }} />
+                    </Skeleton>
+                  </CardMedia>
+                </Card>
+              </Box>
+
               <Box
                 sx={{
                   display: "block",

@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     marginBottom: "10px",
     borderRadius: "15px !important",
+  
     cursor: "pointer",
     width: "100%",
     "&.MuiCard-root": {
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
   cardBox: {
     justifyContent: "center",
+    // padding:"20px"
   },
 
   bookTitleBox: {
@@ -38,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
     wordWrap: "break-word",
     overflow: "hidden",
   },
+
+ 
 }));
 
 export const BookCard = (props) => {
@@ -55,9 +59,11 @@ export const BookCard = (props) => {
 
   return (
     <Box className={classes.cardBox}>
+      <Box sx={{px: {xs:5, md:0}}}>
       <Card className={classes.card} elevation={4} onClick={goToDetailsPage}>
-        <CardMedia className={classes.cardMedia} image={book.book_image} />
+        <CardMedia className={classes.cardMedia} component="img" image={book.book_image} />
       </Card>
+      </Box>
       <Box
         sx={{
           display: "block",

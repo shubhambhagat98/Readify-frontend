@@ -54,10 +54,10 @@ export const MainNavigation = () => {
   }
 
   const logoutHandler = () => {
-
     localStorage.removeItem("readifyUser");
     localStorage.removeItem("token");
     userCtx.setUserData();
+    resetFilters();
     navigate("/", { replace: true });
   };
 
@@ -77,8 +77,21 @@ export const MainNavigation = () => {
   };
 
   const navigateTo = (link) => {
+    resetFilters();
     handleCloseNavMenu();
     navigate(link);
+  };
+
+  const navigateToAccount = (link) => {
+    handleCloseNavMenu();
+    navigate(link);
+  }
+
+  const resetFilters = () => {
+    // reset filters
+    userCtx.setBookRating(0);
+    userCtx.setLikePercent([0, 100]);
+    userCtx.setKeyword("");
   };
 
   const scrollToTarget = (id) => {
@@ -120,7 +133,7 @@ export const MainNavigation = () => {
                 display: { xs: "none", md: "flex" },
                 alignItems: "center",
               }}
-              onClick={() => navigate("/")}
+              onClick={() => navigateTo("/")}
             >
               <Avatar sx={{ mr: 2 }} alt="A" src="/assets/navbrand.png" />
               <Typography
@@ -174,6 +187,7 @@ export const MainNavigation = () => {
 
                 {sections.map((section, idx) => (
                   <MenuItem
+                    // onClick={resetFilters}
                     key={idx + 25}
                     component={HashLink}
                     to={section.Link}
@@ -211,6 +225,7 @@ export const MainNavigation = () => {
               {sections.map((section, idx) => (
                 <MenuItem
                   component={HashLink}
+                  
                   to={section.Link}
                   key={idx + 90}
                   style={{ textDecoration: "none" }}
@@ -271,7 +286,7 @@ export const MainNavigation = () => {
                   {settings.map((setting, idx) => (
                     <MenuItem
                       key={idx + 17}
-                      onClick={() => navigateTo(setting.Link)}
+                      onClick={() => navigateToAccount(setting.Link)}
                     >
                       <Typography textAlign="center">
                         {setting.Title}

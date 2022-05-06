@@ -29,7 +29,8 @@ export const Books = () => {
   const rating = userCtx.rating;
   const likePercent = userCtx.likePercent;
   const sortOrder = userCtx.sortOrder;
-  const [keyword, setKeyword] = useState("");
+  // const [keyword, setKeyword] = useState("");
+  const keyword = userCtx.keyword;
   const [bookList, setBookList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [count, setCount] = useState(30);
@@ -38,22 +39,32 @@ export const Books = () => {
     setCount((prevCount) => prevCount + 30);
   };
 
-  const keywordHandler = (keyword) => {
-    setKeyword(keyword);
-  };
+  // const keywordHandler = (keyword) => {
+  //   setKeyword(keyword);
+  // };
 
   useEffect(() => {
+    
     getBooks();
   }, []);
 
+  useEffect(()=>{
+    // setFilteredList(bookList);
+    bookFilterHandler(rating, keyword, likePercent);
+  },[bookList])
+
   useEffect(() => {
+    
     bookFilterHandler(rating, keyword, likePercent);
   }, [rating, keyword, likePercent]);
 
+  
+
   useEffect(() => {
-    let f1 = structuredClone(filteredList);
+   
+   
     setFilteredList(() => {
-      return f1.sort(sortList(sortOrder));
+      return [...filteredList].sort(sortList(sortOrder))
     });
   }, [sortOrder]);
 
@@ -68,6 +79,7 @@ export const Books = () => {
 
   const bookFilterHandler = (rating, keyword, likePercent) => {
     userCtx.setSortOrder("default");
+   
     setFilteredList(
       bookList.filter((book) => {
         return (
@@ -88,7 +100,7 @@ export const Books = () => {
       if (response.status === 200) {
         const data = await response.json();
         setBookList(data.books);
-        setFilteredList(data.books);
+        // setFilteredList(data.books);
       } else {
         console.log("no response");
       }
@@ -96,6 +108,9 @@ export const Books = () => {
       console.log(error);
     }
   };
+
+
+ 
 
   return (
     <>
@@ -145,7 +160,7 @@ export const Books = () => {
                   lg={9.5}
                   sx={{ pt: 1.5, pl: { xs: 2, sm: 1, md: 0 } }}
                 >
-                  <SearchBar keywordHandler={keywordHandler} />
+                  <SearchBar  />
                 </Grid>
                 <Grid
                   item

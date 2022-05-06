@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
   sidePanelLink: {
     cursor: "pointer",
-    // background: "yellow",
     display: "flex",
     alignItems: "center",
     fontSize: "18px",

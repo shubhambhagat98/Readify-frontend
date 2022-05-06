@@ -136,7 +136,7 @@ export const BookDetails = (props) => {
           }}
         >
           <Card className={classes.card} elevation={0}>
-            <CardMedia className={classes.cardMedia} image={book.book_image} />
+            <CardMedia className={classes.cardMedia} component="img" image={book.book_image} />
           </Card>
         </Grid>
         <Grid item xs={12} sm={7} className={classes.bookText}>
@@ -238,6 +238,7 @@ export const BookDetails = (props) => {
           Recommendations
         </Typography>
 
+        
         {recommendations.length === 0 ? (
           <CardSkeleton />
         ) : (

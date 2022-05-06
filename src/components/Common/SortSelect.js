@@ -22,7 +22,9 @@ const useStyles = makeStyles((theme) => ({
     border: "solid 1px #EA5DEB !important",
     [theme.breakpoints.down("xs")]: {
       fontSize: "12px !important",
+      
     },
+    
   },
 
   selectRoot: {
@@ -66,7 +68,7 @@ export const SortSelect = () => {
         px: 1,
       }}
     >
-      <Box className={classes.selectBox} py={0.5} sx={{ px: { md: 2, xs: 1 } }}>
+      <Box className={classes.selectBox} py={0.5} sx={{ px: { md: 2, xs: 0.5 } }}>
         <Typography noWrap variant="inherit" style={{ fontWeight: "normal" }}>
           Rating |
         </Typography>
@@ -78,7 +80,7 @@ export const SortSelect = () => {
             className={classes.selectRoot}
             disableUnderline
           >
-            <MenuItem value="default">Default</MenuItem>
+            <MenuItem value="default" disabled hidden>Default</MenuItem>
             <MenuItem value="ascending">Ascending</MenuItem>
             <MenuItem value="descending">Descending</MenuItem>
           </Select>

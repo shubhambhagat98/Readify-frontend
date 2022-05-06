@@ -5,14 +5,12 @@ import {
   Typography,
   Rating,
   IconButton,
-
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import { useContext } from "react";
 import UserContext from "../../store/User-Context";
-
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -70,22 +68,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
-
-  deleteIconText:{
+  deleteIconText: {
     fontSize: "22px !important",
     [theme.breakpoints.down("xs")]: {
       fontSize: "32px !important",
     },
-  }
-
-
+  },
 }));
 
 export const BookListCard = (props) => {
   const userCtx = useContext(UserContext);
   const book = props.book;
   const classes = useStyles();
-  
 
   const navigate = useNavigate();
 
@@ -95,18 +89,31 @@ export const BookListCard = (props) => {
 
   const onBookDelete = () => {
     props.deleteBookHandler(book.book_id, props.booklistId);
-  }
+  };
 
   return (
     <Box className={classes.cardBox}>
-      {userCtx.deleteBookMode.booklistId === props.booklistId && userCtx.deleteBookMode.isDelete && (
-        <IconButton className={classes.deleteIcon} size="small" onClick={onBookDelete}>
-          <ClearOutlinedIcon  className={classes.deleteIconText}/>
-        </IconButton>
-      )}
-      <Card className={classes.card} elevation={4} onClick={goToDetailsPage}>
-        <CardMedia className={classes.cardMedia} image={book.book_image} />
-      </Card>
+      {userCtx.deleteBookMode.booklistId === props.booklistId &&
+        userCtx.deleteBookMode.isDelete && (
+          <IconButton
+            className={classes.deleteIcon}
+            size="small"
+            onClick={onBookDelete}
+          >
+            <ClearOutlinedIcon className={classes.deleteIconText} />
+          </IconButton>
+        )}
+
+      <Box sx={{ px: { xs: 5, md: 0 } }}>
+        <Card className={classes.card} elevation={4} onClick={goToDetailsPage}>
+          <CardMedia
+            className={classes.cardMedia}
+            component="img"
+            image={book.book_image}
+          />
+        </Card>
+      </Box>
+
       <Box
         sx={{
           display: "block",

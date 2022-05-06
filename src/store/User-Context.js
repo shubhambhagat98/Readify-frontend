@@ -15,7 +15,9 @@ const UserContext = createContext({
   },
   setDeleteBookMode : (booklist) => {},
   lastVisitedList : "0",
-  setLastVisitedList : (value) => {}
+  setLastVisitedList : (value) => {},
+  keyword: "",
+  setKeyword: (key) => {}
 });
 
 export const UserContextProvider = (props) => {
@@ -32,6 +34,7 @@ export const UserContextProvider = (props) => {
   });
 
   const [lastVisitedListStored, setLastVisitedListStored] = useState("0");
+  const [keywordStored ,setKeywordStored]  = useState("");
 
   const userIsLoggedHandler = (user) => {
     setUserDataStored(user);
@@ -57,6 +60,10 @@ export const UserContextProvider = (props) => {
     setLastVisitedListStored(value);
   }
 
+  const keywordHandler = (key) => {
+      setKeywordStored(key);
+  }
+
   const context = useMemo(
     () => ({
       userData: userDataStored,
@@ -71,8 +78,10 @@ export const UserContextProvider = (props) => {
       setDeleteBookMode: deleteBookModeHandler,
       lastVisitedList: lastVisitedListStored,
       setLastVisitedList: lastVisitedListHandler,
+      keyword: keywordStored,
+      setKeyword : keywordHandler
     }),
-    [userDataStored, ratingStored, likePercentStored, sortOrderStored, deleteBookModeStored, lastVisitedListStored]
+    [userDataStored, ratingStored, likePercentStored, sortOrderStored, deleteBookModeStored, lastVisitedListStored, keywordStored]
   );
 
   return (
