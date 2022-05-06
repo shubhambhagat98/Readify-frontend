@@ -124,9 +124,7 @@ export const BookListCard = (props) => {
           <Typography
             variant="h6"
             sx={{ fontWeight: "normal", cursor: "pointer" }}
-            onClick={() => {
-              alert("hello");
-            }}
+            onClick={goToDetailsPage}
           >
             {book.book_title}
           </Typography>
